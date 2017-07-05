@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+		<title>Fullscreen Layout with Page Transitions</title>
+		<meta name="description" content="Fullscreen Layout with Page Transitions" />
+		<meta name="keywords" content="fullscreen layout, boxes, responsive, page transitions, css transitions, jquery, portfolio, template" />
+		<meta name="author" content="Codrops" />
+		<link rel="stylesheet" type="text/css" href="css/component.css" />
+		<link rel="stylesheet" type="text/css" href="css/carousel.css" />
+		<script src="js/modernizr.custom.js"></script>
+		<script type="text/javascript" src="js/jquery-1.7.1.min.js"></script>
+		<script type="text/javascript" src="js/jquery.carousel.min.js"></script>
+		<style>
+			body{
+				width: 100vw;height: 100vh;overflow: hidden;
+			}
+			#box{position: absolute;top:0;bottom: 0;left: 0;right: 0;margin:auto;width: 590px;height: 750px;}
+			#box #cvs{border: 1px solid #da7d7b
+			}
+			#box button{width: 110px;height: 50px;outline: none;background: #6b6a7e;margin-top: 50px;margin-right: 50px;margin-left: 20px}
+			#box button:nth-of-type(1){left: 136px;}
+			#box button:nth-of-type(2){left: 323px;}
+			#box button:nth-of-type(3){left: 498px;}
+			#box .score{float: right;font-size: 23px;}
+			#boxspan{font-size: 35px;color: #E8603C}
+			*{margin:0;padding:0;list-style-type:none;}
+			a,img{border:0;}
+			body{font:12px/180% Arial, Helvetica, sans-serif, "新宋体";background-color:#F1F1F1;}
+			/* wide-wrapper */
+			#header{width:280px;margin:0px auto;padding-top:75px;}
+			#carousel{width:870px;height:450px;margin:0px auto;padding:0px;}
+			#carousel{list-style:none;padding:0px;}
+			#carousel li{float:left;}
+			#carousel .tooltip, #carousel .bigImage, #carousel .title, #carousel .description{position:absolute;left:-9999px;}
+			.holder{
+				width: 320px;
+				height: 320px;
+
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				margin: -160px 0 0 -160px;
+
+				display: grid;
+				grid-gap: 10px;
+				grid-template-columns: 100px 100px 100px;
+				grid-auto-rows: minmax(100px, auto);
+			}
+
+			.inner{
+				border: 3px solid white;
+			}
+
+
+			@keyframes rotate{
+				0%{
+					transform: rotate(0deg);
+				}
+
+				20%{
+					/*transform: rotate(180deg);*/
+				}
+
+				40%{
+					transform: rotate(360deg);
+				}
+
+				100%{
+					transform: rotate(360deg);
+				}
+			}
+
+			@keyframes rotate2{
+				0%{
+					transform: rotate(0deg);
+				}
+
+				40%{
+					/*transform: rotate(180deg);*/
+				}
+
+				80%{
+					transform: rotate(360deg);
+				}
+
+				100%{
+					transform: rotate(360deg);
+				}
+			}
+
+			@keyframes rotate3{
+				0%{
+					transform: rotate(0deg);
+				}
+
+				30%{
+					/*transform: rotate(180deg);*/
+				}
+
+				60%{
+					transform: rotate(360deg);
+				}
+				100%{
+					transform: rotate(360deg);
+				}
+			}
+
+			@keyframes squarecircle{
+				0%{
+					border-radius: 0;
+					transform: rotate(0deg);
+				}
+
+				50%{
+					border-radius: 20px;
+					transform: rotate(180deg);
+				}
+
+				100%{
+					border-radius: 0;
+					transform: rotate(360deg);
+				}
+			}
+
+			@keyframes threed{
+				0%{
+					transform: rotate3d(1, 0, 0, 0deg);
+				}
+
+				100%{
+					transform: rotate3d(1, 0, 0, 360deg);
+				}
+			}
+
+			@keyframes threed2{
+				0%{
+					transform: rotate3d(0, 1, 0, 0deg);
+				}
+
+				100%{
+					transform: rotate3d(0, 1, 0, 360deg);
+				}
+			}
+
+			@keyframes scale{
+				0%{
+					transform: scale(1) rotate(0deg);
+				}
+
+
+				100%{
+					transform: scale(0) rotate(180deg);
+				}
+			}
+
+			@keyframes pulse{
+				0%{
+					transform: scale(1);
+				}
+
+				50%{
+					transform: scale(0);
+				}
+
+				100%{
+					transform: scale(1);
+				}
+			}
+
+			@keyframes rot{
+				0%{
+					transform: rotate(0deg);
+				}
+
+
+				100%{
+					transform: rotate(90deg);
+				}
+
+			}
+
+			@keyframes scaleside{
+				0%{
+					transform: scale(1, 1);
+				}
+				25%{
+					transform: scale(1, .2);
+				}
+				50%{
+					transform: scale(.2, .2);
+				}
+				75%{
+					transform: scale(.2, 1);
+				}
+				100%{
+					transform: scale(1, 1);
+				}
+			}
+
+			@keyframes rotscale{
+				0%{
+					transform: rotate(0deg) scale(1);
+				}
+
+				50%{
+					transform: rotate(180deg) scale(0);
+				}
+
+				100%{
+					transform: rotate(360deg) scale(1);
+				}
+			}
+
+			@keyframes cornerrot{
+				0%{
+					transform: rotate(0deg);
+				}
+
+				50%{
+					transform: rotate(90deg);
+				}
+
+				100%{
+					transform: rotate(0deg);
+				}
+			}
+
+			.square{
+				width: 20px;
+				height: 20px;
+
+				margin: 34px;
+				border: 3px solid white;
+				position: fixed;
+
+				transform: rotate(0deg);
+				animation-duration: 5s;
+				animation-iteration-count: infinite;
+				animation-timing-function: ease;
+			}
+			#c{
+				display:block;
+				position:absolute;
+				left:50%;
+				top:50%;
+				transform:translate(-50%,-50%);
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">	
+			<div id="bl-main" class="bl-main">
+				<section>
+					<div class="bl-box">
+						<h2 class="bl-icon bl-icon-about">贪吃蛇</h2>
+					</div>
+					<div class="bl-content">
+						<h2>贪吃蛇小游戏</h2>
+						<div id="box">
+							<canvas id="cvs" width="500" height="500"></canvas>
+							<div class="score">score:<br/><span>0</span></div>
+							<button type="button" class="play">play</button>
+							<button type="button" class="pause">pause</button>
+							<button type="button" class="restart">restart</button>
+						</div>
+					</div>
+					<span class="bl-icon bl-icon-close"></span>
+				</section>
+				<section id="bl-work-section">
+					<div class="bl-box">
+						<h2 class="bl-icon bl-icon-works">3D相册集</h2>
+					</div>
+					<div class="bl-content">
+						<h2>3D相册集</h2>
+						<div id="wide-wrapper">
+							<ul id="carousel">
+								<li>
+									<img src="images/image1.jpg" alt=""/>
+									<div class="tooltip">Image description</div>
+								</li>
+								<li><img src="images/image2.jpg" alt=""/></li>
+								<li><img src="images/image3.jpg" alt=""/></li>
+								<li>
+									<img src="images/image4.jpg" alt=""/>
+									<div class="tooltip"><u>Image title</u><br/><br alt=""/>Tooltips support <i>HTML</i> text.</div>
+								</li>
+								<li><img src="images/image5.jpg" alt=""/></li>
+								<li><img src="images/image6.jpg" alt=""/></li>
+								<li>
+									<img src="images/image7.jpg" alt=""/>
+									<div class="tooltip"><u>Image title</u><br/><br/><img src="images/image7.jpg" width="60" height="50" style="float:left; margin-right:10px; margin-bottom:10px;" alt=""/>Load images inside the tooltip.</div>
+								</li>
+								<li><img src="images/image8.jpg" alt=""/></li>
+								<li><img src="images/image9.jpg" alt=""/></li>
+								<li>
+									<img src="images/image10.jpg" alt=""/>
+									<div class="tooltip">Image description</div>
+								</li>
+								<li><img src="images/image11.jpg" alt=""/></li>
+								<li><img src="images/image12.jpg" alt=""/></li>
+								<li>
+									<img src="images/image13.jpg" alt=""/>
+									<div class="tooltip"><u>Image title</u><br/><br/>Tooltips support <i>HTML</i> text.</div>
+								</li>
+								<li><img src="images/image14.jpg" alt=""/></li>
+								<li><img src="images/image15.jpg" alt=""/></li>
+								<li>
+									<img src="images/image16.jpg" alt=""/>
+									<div class="tooltip"><u>Image title</u><br/><br/><img src="images/image16.jpg" width="60" height="50" style="float:left; margin-right:10px; margin-bottom:10px;" alt=""/>Load images inside the tooltip.</div>
+								</li>
+								<li><img src="images/image17.jpg" alt=""/></li>
+								<li><img src="images/image18.jpg" alt=""/></li>
+								<li><img src="images/image19.jpg" alt=""/></li>
+							</ul>
+						</div>
+					</div>
+					<span class="bl-icon bl-icon-close"></span>
+				</section>
+				<section>
+					<div class="bl-box">
+						<h2 class="bl-icon bl-icon-blog">动画加载</h2>
+					</div>
+					<div class="bl-content">
+						<h2>动画加载</h2>
+						<div class="holder">
+							<div class="inner">
+								<div class="square" style="animation-name: rotate;"></div>
+								<div class="square" style="animation-name: rotate2;"></div>
+								<div class="square" style="animation-name: rotate3;"></div>
+							</div>
+							<div class="inner">
+								<div class="square" style="animation-name: squarecircle;"></div>
+							</div>
+							<div class="inner">
+								<div class="square" style=" animation-name: threed;"></div>
+								<div class="square" style=" animation-name: threed2;"></div>
+							</div>
+
+							<div class="inner">
+								<div class="square" style=" animation-name: scale; animation-duration: 2.5s;"></div>
+								<div class="square" style=" animation-name: none;"></div>
+
+							</div>
+							<div class="inner">
+								<div class="square" style=" animation-name: pulse; animation-duration: 1s; width: 2px; height: 2px; margin-left: 30px; margin-top: 30px; animation-delay: 0s;"></div>
+								<div class="square" style=" animation-name: pulse; animation-duration: 1s;  width: 2px; height: 2px; margin-left: 40px; margin-top: 30px; animation-delay: .1s;"></div>
+								<div class="square" style=" animation-name: pulse; animation-duration: 1s;  width: 2px; height: 2px; margin-left: 50px; margin-top: 30px; animation-delay: .2s;"></div>
+
+								<div class="square" style=" animation-name: pulse; animation-duration: 1s; width: 2px; height: 2px; margin-left: 30px; margin-top: 40px; animation-delay: .7s;"></div>
+								<div class="square" style=" animation-name: pulse; animation-duration: 1s;  width: 2px; height: 2px; margin-left: 50px; margin-top: 40px; animation-delay: .3s;"></div>
+
+								<div class="square" style=" animation-name: pulse; animation-duration: 1s; width: 2px; height: 2px; margin-left: 30px; margin-top: 50px; animation-delay: .6s;"></div>
+								<div class="square" style=" animation-name: pulse; animation-duration: 1s; width: 2px; height: 2px; margin-left: 40px; margin-top: 50px; animation-delay: .5s;"></div>
+								<div class="square" style=" animation-name: pulse; animation-duration: 1s; width: 2px; height: 2px; margin-left: 50px; margin-top: 50px; animation-delay: .4s;"></div>
+							</div>
+							<div class="inner">
+								<div class="cube">
+									<div class="square" style=" animation-name: rot; animation-duration: 2.5s"></div>
+									<div class="square" style=" animation-name: rot; animation-duration: 2.5s; animation-direction: reverse;"></div>
+								</div>
+							</div>
+
+							<div class="inner">
+								<div class="square" style=" animation-name: scaleside;"></div>
+							</div>
+							<div class="inner">
+								<div class="square" style=" animation-name: rotscale;"></div>
+							</div>
+							<div class="inner">
+								<div class="square" style=" animation-name: cornerrot; transform-origin: top left;"></div>
+								<div class="square" style=" animation-name: cornerrot; transform-origin: top right;"></div>
+								<div class="square" style=" animation-name: cornerrot; transform-origin: bottom left;"></div>
+								<div class="square" style=" animation-name: cornerrot; transform-origin: bottom right;"></div>
+
+							</div>
+						</div>
+					</div>
+					<span class="bl-icon bl-icon-close"></span>
+				</section>
+				<section>
+					<div class="bl-box">
+						<h2 class="bl-icon bl-icon-contact">鼠标跟随</h2>
+					</div>
+					<div class="bl-content">
+						<h2>鼠标跟随</h2>
+						<canvas id="c"></canvas>
+					</div>
+					<span class="bl-icon bl-icon-close"></span>
+				</section>
+			</div>
+		</div>
+		<script src="js/boxlayout.js"></script>
+		<script>
+			$(function() {
+				Boxlayout.init();
+				var cvs=document.getElementById("cvs");
+				var ctx=cvs.getContext("2d");
+				var w=20,
+						m,
+						n,
+						u,
+						state,
+						arrm=[],
+						arrn=[],
+						timer,
+						flag,
+						num=0,
+						oSpan=document.getElementsByTagName("span")[0],
+						txt="失败了，点击play 重新开始";
+				ctx.font="30px/50px arial";
+				//初始画格子
+				function grid(){
+					for(var i=0;i<100;i++){
+						for(var j=0;j<100;j++){
+							ctx.strokeStyle="black";
+							ctx.lineWidth=2;
+							ctx.strokeRect(w*j,w*i,w,w)
+						}
+					}
+				}
+				grid();
+				//初始蛇 三个黑点
+				function pore(){
+					ctx.fillStyle="black";
+					m=Math.floor(Math.random()*15+5);
+					n=Math.floor(Math.random()*15+5);
+					u=Math.random();
+					console.log(u);
+					if(u<0.5){
+						for(var i=0;i<3;i++){
+							u>0.25?ctx.fillRect(m*w,(n+i)*w,w,w):ctx.fillRect(m*w,(n-i)*w,w,w);
+							arrm.push(m);
+							u>0.25?arrn.push(n+i):arrn.push(n-i);
+						}
+					}else{
+						for(var i=0;i<3;i++){
+							u>0.75?ctx.fillRect((m+i)*w,n*w,w,w):ctx.fillRect((m-i)*w,n*w,w,w);
+							arrn.push(n);
+							u>0.75?arrm.push(m+i):arrm.push(m-i);
+						}
+					}
+				}
+				pore();
+				//初始第一个随机点
+				var x1,y1,x2,y2;
+				function random1(){
+					x1=Math.floor(Math.random()*25);
+					y1=Math.floor(Math.random()*25);
+					ctx.fillStyle="#CDCD37";
+					ctx.fillRect(x1*w,y1*w,w,w);
+					if(x1==m&&y1==n){
+						random1();
+					}
+				}
+				random1();
+				//初始第二个随机点
+				function random2(){
+					x2=Math.floor(Math.random()*25);
+					y2=Math.floor(Math.random()*25);
+					if((x2==m&&y2==n)||(x2==x1&&y2==y1)){
+						random2();
+					}
+					ctx.fillStyle="#CDCD37";
+					ctx.fillRect(x2*w,y2*w,w,w);
+				}
+				random2();
+				//移除最后一个
+				function remove(){
+					if(!((m==x1&&n==y1)||(m==x2&&n==y2))){
+						ctx.fillStyle="black";
+						ctx.clearRect(arrm[arrm.length-1]*w,arrn[arrn.length-1]*w,w,w);
+						arrm.splice(arrm.length-1,1);
+						arrn.splice(arrn.length-1,1);
+						grid();
+					}
+				}
+				//最前面增加一个
+				function add(){
+					ctx.fillStyle="black";
+					arrm.unshift(m);
+					arrn.unshift(n);
+					for(var i=0;i<arrm.length;i++){
+						ctx.fillRect(arrm[i]*w,arrn[i]*w,w,w);
+					}
+					ctx.fillStyle="#CDCD37";
+					ctx.fillRect(x1*w,y1*w,w,w);
+					ctx.fillRect(x2*w,y2*w,w,w);
+				}
+				//吃到豆子了
+				function resrandom(){
+					if(m==x1&&n==y1){
+						random1();
+						num++;
+						oSpan.innerHTML=num;
+					}
+					if(m==x2&&n==y2){
+						random2();
+						num++;
+						oSpan.innerHTML=num;
+					}
+				}
+				function dead(a,b){
+					if(num>=90){
+						var txt1="恭喜你赢了,点play重新开始";
+						clearInterval(timer);
+						ctx.fillStyle="red";
+						ctx.fillText(txt1,140,330);
+						state=false;
+						$("button").first().prop("disabled",false);
+						$(".pause").prop("disabled",true);
+						flag=1;
+						return false;
+					}
+					if(m<0||m>24||n<0||n>24){
+						clearInterval(timer);
+						ctx.fillStyle="red";
+						ctx.fillText(txt,80,330);
+						state=false;
+						$("button").first().prop("disabled",false);
+						$(".pause").prop("disabled",true);
+						flag=1;
+						return false;
+					}
+					for(var j=1;j<arrm.length;j++){
+						if((arrm[0]+a)==arrm[j]&&(arrn[0]+b)==arrn[j]){
+							clearInterval(timer);
+							ctx.fillStyle="red";
+							ctx.fillText(txt,80,330);
+							state=false;
+							$("button").first().prop("disabled",false);
+							$(".pause").prop("disabled",true);
+							flag=1;
+							return false;
+						}
+					}
+				}
+				function left(){
+					m=m-1;
+					dead(-1,0);
+					remove();
+					resrandom();
+					add();
+				}
+				function up(){
+					n=n-1;
+					dead(0,-1);
+					remove();
+					resrandom();
+					add();
+				}
+				function down(){
+					n=n+1;
+					dead(0,1);
+					remove();
+					resrandom();
+					add();
+				}
+				function right(){
+					m=m+1;
+					dead(1,0);
+					remove();
+					resrandom();
+					add();
+				}
+				document.onkeydown=function(ev){
+					if(state!=true){
+						return;
+					}
+					var code=ev.keyCode;
+					if(code==37){
+						if(arrm[0]>arrm[1]){
+							return;
+						}
+						clearInterval(timer);
+						timer=setInterval(left,200);
+					}
+					else if(code==39){
+						if(arrm[0]<arrm[1]){
+							return;
+						}
+						clearInterval(timer);
+						timer=setInterval(right,200);
+					}
+					else if(code==38){
+						if(arrn[0]>arrn[1]){
+							return;
+						}
+						clearInterval(timer);
+						timer=setInterval(up,200);
+					}
+					else if(code==40){
+						if(arrn[0]<arrn[1]){
+							return;
+						}
+						clearInterval(timer);
+						timer=setInterval(down,200);
+					}
+				};
+
+
+				function direction(){
+					if(arrm[0]>arrm[1]){
+						timer=setInterval(right,200);
+					}else if(arrm[0]==arrm[1]){
+						if(arrn[0]>arrn[1]){
+							timer=setInterval(down,200);
+						}else{
+							timer=setInterval(up,200);
+						}
+					}else{
+						timer=setInterval(left,200);
+					}
+				}
+
+				$("button").each(function(i,e){
+					if(i==0){
+						$(this).click(function(){
+							num=0;
+							oSpan.innerHTML=num;
+							state=true;
+							clearInterval(timer);
+							if(flag){
+								ctx.clearRect(0,0,700,700);
+								arrm=[];
+								arrn=[];
+								grid();
+								pore();
+								random1();
+								random2();
+							}
+							direction();
+							$(this).prop("disabled",true);
+							$(".pause").prop("disabled",false);
+						});
+					};
+					if(i==1){
+						$(this).click(function(){
+							state=false;
+							clearInterval(timer);
+							$("button").first().prop("disabled",false);
+							$(this).prop("disabled",true);
+						});
+						$(this).prop("disabled",true);
+					};
+					if(i==2){
+						$(this).click(function(){
+							num=0;
+							oSpan.innerHTML=num;
+							clearInterval(timer);
+							flag=0;
+							state=true;
+							ctx.clearRect(0,0,700,700);
+							arrm=[];
+							arrn=[];
+							grid();
+							pore();
+							random1();
+							random2();
+							direction();
+							$(".pause").prop("disabled",false);
+							$(".play").prop("disabled",true)
+						});
+					}
+				});
+			});
+		</script>
+		<script type="text/javascript">
+			$(document).ready(function($){
+				$('#carousel').carousel({
+					width: 870,
+					height: 350,
+					itemWidth:120,
+					horizontalRadius:270,
+					verticalRadius:85,
+					resize:false,
+					mouseScroll:false,
+					mouseDrag:true,
+					scaleRatio:0.4,
+					scrollbar:true,
+					tooltip:true,
+					mouseWheel:true,
+					mouseWheelReverse:true
+				});
+
+			});
+		</script>
+		<script>
+			(function(main) {
+				main();
+			})(function() {
+
+				'use strict';
+
+				var c = document.getElementById('c');
+				var ctx = c.getContext('2d');
+				var WIDTH = c.width = window.innerWidth;
+				var HEIGHT = c.height = window.innerHeight;
+				var mouse = {
+					x: WIDTH / 2,
+					y: HEIGHT / 2
+				};
+
+				var Blob = function(x, y, r, color) {
+					this.x = x;
+					this.y = y;
+					this.vx = 0;
+					this.vy = 0;
+					this.easex = 0.01 + Math.random() * 0.09;
+					this.easey = 0.01 + Math.random() * 0.09;
+					this.r = r;
+					this.color = color;
+				};
+
+				Blob.prototype = {
+					constructor: Blob,
+					update: function(target) {
+						this.vx += (target.x - this.x) * this.easex;
+						this.vy += (target.y - this.y) * this.easey;
+						this.vx *= 0.89;
+						this.vy *= 0.89;
+						this.x += this.vx;
+						this.y += this.vy;
+						this.color += 1;
+					},
+					renderStroke: function(ctx) {
+						ctx.save();
+						ctx.fillStyle = 'hsla(' + this.color + ', 100%, 50%, 1)';
+						ctx.translate(this.x, this.y);
+						ctx.beginPath();
+						ctx.arc(0, 0, this.r, 0, Math.PI * 2);
+						ctx.fill();
+						ctx.restore();
+					},
+					renderFill: function(ctx) {
+						ctx.save();
+						ctx.fillStyle = 'white';
+						ctx.translate(this.x, this.y);
+						ctx.beginPath();
+						ctx.arc(0, 0, this.r * 0.8, 0, Math.PI * 2);
+						ctx.fill();
+						ctx.restore();
+					}
+				};
+
+				var blobCount = 50;
+				var blobList = [];
+				var blob = null;
+				var color = Math.random() * 360;
+
+				for (var i = 0; i < blobCount; i++) {
+					blob = new Blob(
+							WIDTH * Math.random(),
+							HEIGHT * Math.random(),
+							5 + Math.random() * 50,
+							color
+					);
+					blobList.push(blob);
+				}
+
+				c.addEventListener('mousemove', function(e) {
+					var rect = c.getBoundingClientRect();
+					mouse.x = e.clientX - rect.left;
+					mouse.y = e.clientY - rect.top;
+				});
+
+				requestAnimationFrame(function loop() {
+					requestAnimationFrame(loop);
+
+					ctx.clearRect(0, 0, WIDTH, HEIGHT);
+
+					for (var i = 0; i < blobCount; i++) {
+						blob = blobList[i];
+						blob.update(mouse);
+						blob.renderStroke(ctx);
+					}
+
+					for (var j = 0; j < blobCount; j++) {
+						blob = blobList[j];
+						blob.renderFill(ctx);
+					}
+
+				});
+
+			});
+		</script>
+
+	</body>
+</html>
