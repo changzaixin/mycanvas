@@ -502,6 +502,7 @@
 						oSpan.innerHTML=num;
 					}
 				}
+				/*游戏结束*/
 				function dead(a,b){
 					if(num>=90){
 						var txt1="恭喜你赢了,点play重新开始";
@@ -614,15 +615,14 @@
 						timer=setInterval(left,200);
 					}
 				}
-
 				$("button").each(function(i,e){
 					if(i==0){
 						$(this).click(function(){
-							num=0;
-							oSpan.innerHTML=num;
 							state=true;
 							clearInterval(timer);
 							if(flag){
+								num=0;
+								oSpan.innerHTML=num;po
 								ctx.clearRect(0,0,700,700);
 								arrm=[];
 								arrn=[];
@@ -639,6 +639,7 @@
 					if(i==1){
 						$(this).click(function(){
 							state=false;
+							flag=false;
 							clearInterval(timer);
 							$("button").first().prop("disabled",false);
 							$(this).prop("disabled",true);
